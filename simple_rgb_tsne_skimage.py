@@ -16,9 +16,8 @@ dpi=500
 perplexity=int(sys.argv[1]) if len(sys.argv)>1 else 4
 
 
+# Load images into a flat array
 filenames=list(glob.glob(image_dir+'*.jpg'))
-
-
 images = []
 res=100
 total_res = res**2*3 # 2 for x and y, 3 for rgb
@@ -34,11 +33,12 @@ for imageName in filenames:
   count+=1
 
 
-
+# Do T-SNE
 n_components = 2
 tsne = manifold.TSNE(n_components=n_components, init='pca', random_state=0, perplexity=perplexity)
 Y = tsne.fit_transform(x_value)
 
+# Plot result
 canvas = plot.image_scatter(Y[:, 0], Y[:, 1], images, min_canvas_size=3000, bg_color=255, lw=10)
 plt.imshow(canvas)
 plt.xticks([])
